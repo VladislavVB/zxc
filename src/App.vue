@@ -1,38 +1,49 @@
 <template>
   <div class="post__wrapper">
-    <form class="post__form" @submit.prevent>
+    <PostForm @create="createPost" />
+    <PostList :posts="posts" />
+    <!-- <form class="post__form" @submit.prevent>
       <h3>Создание поста</h3>
       <input class="post__form-input" v-model="postTile" type="text" placeholder="Название" />
       <input class="post__form-input" v-model="postBody" type="text" placeholder="Описание" />
       <button @click="createPost()" class="post__form-btn">Отправить</button>
-    </form>
-    <div class="post" v-for="post in posts" :key="post">
+    </form> -->
+    <!-- <div class="post" v-for="post in posts" :key="post">
       <div><strong>Название: </strong>{{ post.title }}</div>
       <div><strong>Описание: </strong>{{ post.body }}</div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
+import PostForm from "@/components/PostForm.vue";
+import PostList from "@/components/PostList.vue";
+
 export default {
+  components: {
+    PostForm,
+    PostList,
+  },
   data() {
     return {
-      postTile: '',
-      postBody: '',
-      posts: [],
+      // postTile: "",
+      // postBody: "",
+      posts: [{ id: 1, title: "dasdas", body: "dasd" }],
     };
   },
   methods: {
-    createPost() {
-      const newPost = {
-        id: Date.now(),
-        title: this.postTile,
-        body: this.postBody,
-      }
-      this.posts.push(newPost)
-      this.postTile = ''
-      this.postBody = ''
-    }
+    createPost(post) {
+      console.log(post);
+      this.posts.push(post)
+      // const newPost = {
+      //   id: Date.now(),
+      //   title: this.postTile,
+      //   body: this.postBody,
+      // };
+      // this.posts.push(newPost);
+      // this.postTile = "";
+      // this.postBody = "";
+    },
   },
 };
 </script>
@@ -58,7 +69,7 @@ export default {
     flex-direction: column;
     margin-bottom: 100px;
     h3 {
-      margin-bottom: 15px;  
+      margin-bottom: 15px;
     }
     &-input {
       width: 100%;
