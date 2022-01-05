@@ -71,20 +71,7 @@ export default {
     h3 {
       margin-bottom: 15px;
     }
-    &-input {
-      width: 100%;
-      border: 2px solid rgb(45, 82, 52);
-      padding: 10px 15px;
-      margin-bottom: 10px;
-    }
-    &-btn {
-      margin-left: auto;
-      margin-top: 15px;
-      border: 2px solid rgb(45, 82, 52);
-      align-self: flex-end;
-      padding: 10px 15px;
-      background-color: transparent;
-    }
+   
   }
 }
 </style>
