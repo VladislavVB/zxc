@@ -1,49 +1,61 @@
 <template>
   <div class="post__wrapper">
-    <PostForm @create="createPost" />
-    <PostList :posts="posts" />
-    <!-- <form class="post__form" @submit.prevent>
-      <h3>Создание поста</h3>
-      <input class="post__form-input" v-model="postTile" type="text" placeholder="Название" />
-      <input class="post__form-input" v-model="postBody" type="text" placeholder="Описание" />
-      <button @click="createPost()" class="post__form-btn">Отправить</button>
-    </form> -->
-    <!-- <div class="post" v-for="post in posts" :key="post">
-      <div><strong>Название: </strong>{{ post.title }}</div>
-      <div><strong>Описание: </strong>{{ post.body }}</div>
-    </div> -->
+    <h1>Страница с постами</h1>
+    <my-button class="post__create" @click="showDialog">Создать пост</my-button>
+    <my-dialog v-model:show="dialogVisible">
+      <PostForm @create="createPost" />
+    </my-dialog>
+    <PostList v-if="!isPostLoading" :posts="posts" @remove="removePost" />
+    <div v-else>загрузка...</div>
   </div>
 </template>
 
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
+import MyButton from "@/components/UI/MyButton.vue";
+import axios from "axios";
 
 export default {
   components: {
     PostForm,
     PostList,
+    MyButton,
   },
   data() {
     return {
-      // postTile: "",
-      // postBody: "",
-      posts: [{ id: 1, title: "dasdas", body: "dasd" }],
+      dialogVisible: false,
+      isPostLoading: false,
+      posts: [],
     };
   },
   methods: {
     createPost(post) {
       console.log(post);
-      this.posts.push(post)
-      // const newPost = {
-      //   id: Date.now(),
-      //   title: this.postTile,
-      //   body: this.postBody,
-      // };
-      // this.posts.push(newPost);
-      // this.postTile = "";
-      // this.postBody = "";
+      this.dialogVisible = false;
     },
+    removePost(post) {
+      this.posts = this.posts.filter((p) => p.id !== post.id);
+    },
+    showDialog() {
+      this.dialogVisible = true;
+    },
+    async fetchPosts() {
+      try {
+        this.isPostLoading = true;
+
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+        );
+        this.posts = response.data;
+        this.isPostLoading = false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchPosts();
   },
 };
 </script>
@@ -67,11 +79,13 @@ export default {
   &__form {
     display: flex;
     flex-direction: column;
-    margin-bottom: 100px;
     h3 {
       margin-bottom: 15px;
     }
-   
+  }
+  &__create {
+    margin-top: 50px;
+    margin-bottom: 50px;
   }
 }
 </style>
