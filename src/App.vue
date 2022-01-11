@@ -5,10 +5,7 @@
       <my-button class="post__create" @click="showDialog"
         >Создать пост</my-button
       >
-      <my-select
-        :value="selectedSort"
-        :options="sortOptions"
-      />
+      <my-select v-model="selectedSort" :options="sortOptions" />
     </div>
     <my-dialog v-model:show="dialogVisible">
       <PostForm @create="createPost" />
@@ -40,19 +37,19 @@ export default {
   components: {
     PostForm,
     PostList,
-    MyButton,
     MySelect,
+    MyButton,
   },
   data() {
     return {
       dialogVisible: false,
       isPostLoading: false,
       posts: [],
-      selectedSort: 'dsadsad',
+      selectedSort: "",
       sortOptions: [
-        {value: 'title', name: 'По названию'},
-        {value: 'body', name: 'По содержимому'},
-      ]
+        { value: "title", name: "По названию" },
+        { value: "body", name: "По содержимомуe" },
+      ],
     };
   },
   methods: {
@@ -82,6 +79,14 @@ export default {
   },
   mounted() {
     this.fetchPosts();
+  },
+  // computed: {
+  // sortedPost() {
+
+  // }
+  // },
+  updated() {
+    console.log(this.selectedSort);
   },
 };
 </script>
