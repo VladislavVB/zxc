@@ -193,8 +193,6 @@ export default {
       margin-bottom: 15px;
     }
   }
-  &__create {
-  }
 }
 .app {
   &__btns {
