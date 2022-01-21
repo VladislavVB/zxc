@@ -52,6 +52,7 @@ export default {
     createPost(post) {
       console.log(post);
       this.dialogVisible = false;
+      this.posts.push(post)
     },
     removePost(post) {
       this.posts = this.posts.filter((p) => p.id !== post.id);
