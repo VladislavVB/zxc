@@ -10,7 +10,7 @@
     <my-dialog v-model:show="dialogVisible">
       <PostForm @create="createPost" />
     </my-dialog>
-    <PostList v-if="!isPostLoading" :posts="posts" @remove="removePost" />
+    <PostList v-if="!isPostLoading" :posts="sortedPost" @remove="removePost" />
     <div v-else>
       <div class="lds-roller">
         <div></div>
@@ -29,16 +29,12 @@
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
-import MyButton from "@/components/UI/MyButton.vue";
-import MySelect from "@/components/UI/MySelect.vue";
 import axios from "axios";
 
 export default {
   components: {
     PostForm,
     PostList,
-    MySelect,
-    MyButton,
   },
   data() {
     return {
@@ -80,14 +76,15 @@ export default {
   mounted() {
     this.fetchPosts();
   },
-  // computed: {
-  // sortedPost() {
+  computed: {
+    sortedPost() {
+      return [...this.posts].sort((post1, post2) => {
+        return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+      })
+    }
+  }
 
-  // }
-  // },
-  updated() {
-    console.log(this.selectedSort);
-  },
+  
 };
 </script>
 
