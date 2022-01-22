@@ -28,6 +28,7 @@
         <div></div>
       </div>
     </div>
+    <div ref="observer" class="observer"></div>
     <!-- <post-pagination :totalPages="totalPages" @chengePage="chengePage" /> -->
   </div>
 </template>
@@ -77,7 +78,6 @@ export default {
     },
     async fetchPosts() {
       try {
-        this.isPostLoading = true;
 
         const response = await axios.get(
           "https://jsonplaceholder.typicode.com/posts",
@@ -97,9 +97,44 @@ export default {
         console.log(error);
       }
     },
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+
+
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.page,
+              _limitpage: this.limitPage,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.limitPage
+        );
+        this.posts = [...this.posts, ...response.data];
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   mounted() {
     this.fetchPosts();
+    console.log(this.$refs.observer);
+    const options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+    const callback = (entries) => {
+      if (entries[0].isIntersecting && this.page < this.totalPages) {
+        this.loadMorePosts();
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    console.log(observer);
+    observer.observe(this.$refs.observer);
   },
   computed: {
     sortedPost() {
@@ -238,5 +273,9 @@ export default {
     margin-top: 50px;
     margin-bottom: 50px;
   }
+}
+.observer {
+  height: 0px;
+  // background: #2d5234;
 }
 </style>
