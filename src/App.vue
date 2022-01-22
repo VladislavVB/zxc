@@ -28,29 +28,21 @@
         <div></div>
       </div>
     </div>
-    <div class="page">
-      <div
-        class="page__count"
-        :class="{ active: page === pageNumber }"
-        v-for="pageNumber in totalPages"
-        :key="pageNumber"
-        @click="chengePage(pageNumber)"
-      >
-        {{ pageNumber }}
-      </div>
-    </div>
+    <post-pagination :totalPages="totalPages" @chengePage="chengePage" />
   </div>
 </template>
 
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
+import PostPagination from "./components/PostPagination.vue";
 import axios from "axios";
 
 export default {
   components: {
     PostForm,
     PostList,
+    PostPagination,
   },
   data() {
     return {
@@ -61,7 +53,7 @@ export default {
       searchQuery: "",
       page: 1,
       limitPage: 10,
-      totalPages: 100,
+      totalPages: 0,
       sortOptions: [
         { value: "title", name: "По названию" },
         { value: "body", name: "По содержимомуe" },
@@ -70,10 +62,9 @@ export default {
   },
   methods: {
     chengePage(pageNumber) {
-      this.page = pageNumber
+      this.page = pageNumber;
     },
     createPost(post) {
-      console.log(post);
       this.dialogVisible = false;
       this.posts.push(post);
     },
@@ -125,9 +116,9 @@ export default {
   },
   watch: {
     page() {
-      this.fetchPosts()
-    }
-  }
+      this.fetchPosts();
+    },
+  },
 };
 </script>
 
@@ -245,17 +236,6 @@ export default {
     justify-content: space-between;
     margin-top: 50px;
     margin-bottom: 50px;
-  }
-}
-.page {
-  display: flex;
-  margin-top: 20px;
-  &__count {
-    padding: 10px;
-    border: 1px solid #2d5234;
-    &.active {
-      background: rgba(0, 0, 0, 0.3);
-    }
   }
 }
 </style>
