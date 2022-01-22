@@ -55,6 +55,7 @@ export default {
       limitPage: 10,
       totalPages: 0,
       sortOptions: [
+        { value: "", name: "По умолчанию" },
         { value: "title", name: "По названию" },
         { value: "body", name: "По содержимомуe" },
       ],
