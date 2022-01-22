@@ -28,21 +28,21 @@
         <div></div>
       </div>
     </div>
-    <post-pagination :totalPages="totalPages" @chengePage="chengePage" />
+    <!-- <post-pagination :totalPages="totalPages" @chengePage="chengePage" /> -->
   </div>
 </template>
 
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
-import PostPagination from "./components/PostPagination.vue";
+// import PostPagination from "./components/PostPagination.vue";
 import axios from "axios";
 
 export default {
   components: {
     PostForm,
     PostList,
-    PostPagination,
+    // PostPagination,
   },
   data() {
     return {
@@ -62,9 +62,9 @@ export default {
     };
   },
   methods: {
-    chengePage(pageNumber) {
-      this.page = pageNumber;
-    },
+    // chengePage(pageNumber) {
+    //   this.page = pageNumber;
+    // },
     createPost(post) {
       this.dialogVisible = false;
       this.posts.push(post);
@@ -115,11 +115,11 @@ export default {
       );
     },
   },
-  watch: {
-    page() {
-      this.fetchPosts();
-    },
-  },
+  // watch: {
+  //   page() {
+  //     this.fetchPosts();
+  //   },
+  // },
 };
 </script>
 
