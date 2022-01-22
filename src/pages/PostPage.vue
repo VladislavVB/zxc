@@ -28,7 +28,7 @@
         <div></div>
       </div>
     </div>
-    <div ref="observer" class="observer"></div>
+    <div v-intersection="loadMorePosts" class="observer"></div>
     <!-- <post-pagination :totalPages="totalPages" @chengePage="chengePage" /> -->
   </div>
 </template>
@@ -78,7 +78,6 @@ export default {
     },
     async fetchPosts() {
       try {
-
         const response = await axios.get(
           "https://jsonplaceholder.typicode.com/posts",
           {
@@ -101,7 +100,6 @@ export default {
       try {
         this.page += 1;
 
-
         const response = await axios.get(
           "https://jsonplaceholder.typicode.com/posts",
           {
@@ -122,19 +120,7 @@ export default {
   },
   mounted() {
     this.fetchPosts();
-    console.log(this.$refs.observer);
-    const options = {
-      rootMargin: "0px",
-      threshold: 1.0,
-    };
-    const callback = (entries) => {
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts();
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    console.log(observer);
-    observer.observe(this.$refs.observer);
+    
   },
   computed: {
     sortedPost() {
@@ -159,7 +145,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .lds-roller {
   display: inline-block;
   position: relative;
