@@ -257,6 +257,7 @@ export default {
 }
 .observer {
   height: 0px;
+  transform: translateY(-150px);
   // background: #2d5234;
 }
 </style>
