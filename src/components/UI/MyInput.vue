@@ -19,6 +19,7 @@ export default {
   width: 100%;
   border: 2px solid rgb(45, 82, 52);
   padding: 10px 15px;
-  margin-bottom: 10px;
+  margin-bottom: 9px;
 }
+
 </style>

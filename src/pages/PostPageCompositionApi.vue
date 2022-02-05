@@ -159,7 +159,7 @@ export default {
   margin: -4px 0 0 -4px;
 }
 .lds-roller div:nth-child(1) {
-  animation-delay: -0.036s;
+  animation-delay: -0.046s;
 }
 .lds-roller div:nth-child(1):after {
   top: 63px;
