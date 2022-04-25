@@ -5,6 +5,7 @@ import About from "@/pages/About";
 import PostSingle from "@/pages/PostSingle";
 import PostPageWithStore from "@/pages/PostPageWithStore";
 import PostPageCompositionApi from "@/pages/PostPageCompositionApi";
+import TestVuex from "@/pages/TestVuex"
 
 
 const routes = [
@@ -31,6 +32,10 @@ const routes = [
   {
     path: "/composition",
     component: PostPageCompositionApi,
+  },
+  {
+    path: "/test",
+    component: TestVuex,
   },
 ];
 
