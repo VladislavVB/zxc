@@ -1,81 +1,93 @@
 <template>
   <div class="post__wrapper">
     <h1>Страница с постами</h1>
-    <my-input
-      :model-value="searchQuery"
-      @update:model-value="setSearchQuery"
-      placeholder="Поиск...."
-      v-focus
-    />
+    <h1>{{ $store.state.post.limit}}</h1>
+    <!-- <my-input v-model="searchQuery" placeholder="Поиск"></my-input> -->
     <div class="app__btns">
-      <my-button @click="showDialog"> Создать пользователя </my-button>
-      <my-select
-        :model-value="selectedSort"
-        @update:model-value="setSelectedSort"
-        :options="sortOptions"
-      />
-    </div>
-    <my-dialog v-model:show="dialogVisible">
-      <post-form @create="createPost" />
-    </my-dialog>
-    <post-list
-      :posts="sortedAndSearchedPosts"
-      @remove="removePost"
-      v-if="!isPostsLoading"
-    />
-    <div v-else>Идет загрузка...</div>
-    <div v-intersection="loadMorePosts" class="observer"></div>
-    <div class="page__wrapper">
-      <div
-        v-for="pageNumber in totalPages"
-        :key="pageNumber"
-        class="page"
-        :class="{
-          'current-page': page === pageNumber,
-        }"
-        @click="changePage(pageNumber)"
+      <my-button class="post__create" @click="showDialog"
+        >Создать пост</my-button
       >
-        {{ pageNumber }}
+      <!-- <my-select v-model="selectedSort" :options="sortOptions" /> -->
+    </div>
+    <!-- <my-dialog v-model:show="dialogVisible">
+      <PostForm @create="createPost" />
+    </my-dialog> -->
+    <PostList
+      v-if="!isPostLoading"
+      :posts="sortAndSearchPosts"
+      @remove="removePost"
+    />
+    <div v-else>
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
+    <div v-intersection="loadMorePosts" class="observer"></div>
+    <!-- <post-pagination :totalPages="totalPages" @chengePage="chengePage" /> -->
   </div>
 </template>
 
 <script>
-import PostForm from "@/components/PostForm";
-import PostList from "@/components/PostList";
-import MyButton from "@/components/UI/MyButton";
-// import axios from "axios";
-import MySelect from "@/components/UI/MySelect";
-import MyInput from "@/components/UI/MyInput";
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import PostForm from "@/components/PostForm.vue";
+import PostList from "@/components/PostList.vue";
+
+import {mapState, mapGetters, mapActionsm, mapMutations} from "vuex"
+
+// import PostPagination from "./components/PostPagination.vue";
 
 export default {
   components: {
-    MyInput,
-    MySelect,
-    MyButton,
-    PostList,
     PostForm,
+    PostList,
+    // PostPagination,
   },
   data() {
     return {
-      dialogVisible: false,
+      // posts: [],
+      // dialogVisible: false,
+      // isPostLoading: false,
+      // selectedSort: "",
+      // searchQuery: "",
+      // page: 1,
+      // limitPage: 10,
+      // totalPages: 0,
+      // sortOptions: [
+      //   { value: "", name: "По умолчанию" },
+      //   { value: "title", name: "По названию" },
+      //   { value: "body", name: "По содержимомуe" },
+      // ],
     };
   },
   methods: {
+    ...mapState({
+
+    }),
+    ...mapGetters({
+
+    }),
+    ...mapActionsm({
+
+    }),
     ...mapMutations({
-      setPage: "post/setPage",
-      setSearchQuery: "post/setSearchQuery",
-      setSelectedSort: "post/setSelectedSort",
-    }),
-    ...mapActions({
-      loadMorePosts: "post/loadMorePosts",
-      fetchPosts: "post/fetchPosts",
-    }),
+
+    })
+
+    // chengePage(pageNumber) {
+    //   this.page = pageNumber;
+    // },
+    test() {
+      console.log(1);
+    },
     createPost(post) {
-      this.posts.push(post);
       this.dialogVisible = false;
+      this.posts.push(post);
     },
     removePost(post) {
       this.posts = this.posts.filter((p) => p.id !== post.id);
@@ -83,49 +95,188 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
+    // async fetchPosts() {
+    //   try {
+    //     const response = await axios.get(
+    //       "https://jsonplaceholder.typicode.com/posts",
+    //       {
+    //         params: {
+    //           _page: this.page,
+    //           _limitpage: this.limitPage,
+    //         },
+    //       }
+    //     );
+    //     this.totalPages = Math.ceil(
+    //       response.headers["x-total-count"] / this.limitPage
+    //     );
+    //     this.posts = response.data;
+    //     this.isPostLoading = false;
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+    // async loadMorePosts() {
+    //   try {
+    //     this.page += 1;
+
+    //     const response = await axios.get(
+    //       "https://jsonplaceholder.typicode.com/posts",
+    //       {
+    //         params: {
+    //           _page: this.page,
+    //           _limitpage: this.limitPage,
+    //         },
+    //       }
+    //     );
+    //     this.totalPages = Math.ceil(
+    //       response.headers["x-total-count"] / this.limitPage
+    //     );
+    //     this.posts = [...this.posts, ...response.data];
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
   },
   mounted() {
-    this.fetchPosts();
+  this.test();
+
   },
   computed: {
-    ...mapState({
-      posts: (state) => state.post.posts,
-      isPostsLoading: (state) => state.post.isPostsLoading,
-      selectedSort: (state) => state.post.selectedSort,
-      searchQuery: (state) => state.post.searchQuery,
-      page: (state) => state.post.page,
-      limit: (state) => state.post.limit,
-      totalPages: (state) => state.post.totalPages,
-      sortOptions: (state) => state.post.sortOptions,
-    }),
-    ...mapGetters({
-      sortedPosts: "post/sortedPosts",
-      sortedAndSearchedPosts: "post/sortedAndSearchedPosts",
-    }),
+    // sortedPost() {
+    //   return [...this.posts].sort((post1, post2) => {
+    //     return post1[this.selectedSort]?.localeCompare(
+    //       post2[this.selectedSort]
+    //     );
+    //   });
+    // },
+    // sortAndSearchPosts() {
+    //   return this.sortedPost.filter((post) =>
+    //     post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+    //   );
+    // },
   },
+  // watch: {
+  //   page() {
+  //     this.fetchPosts();
+  //   },
+  // },
 };
 </script>
 
-<style>
-.app__btns {
-  margin: 15px 0;
-  display: flex;
-  justify-content: space-between;
+<style lang="scss">
+.lds-roller {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
 }
-.page__wrapper {
-  display: flex;
-  margin-top: 15px;
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
 }
-.page {
-  border: 1px solid black;
-  padding: 10px;
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2d5234;
+  margin: -4px 0 0 -4px;
 }
-.current-page {
-  border: 2px solid teal;
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+.lds-roller div:nth-child(1):after {
+  top: 63px;
+  left: 63px;
+}
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.lds-roller div:nth-child(2):after {
+  top: 68px;
+  left: 56px;
+}
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 71px;
+  left: 48px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 71px;
+  left: 32px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 68px;
+  left: 24px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 63px;
+  left: 17px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12px;
+}
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
+.post {
+  padding: 15px;
+  border: 2px solid rgb(45, 82, 52);
+  margin-top: 15px;
+  &__wrapper {
+    max-width: 800px;
+    margin: auto;
+    margin-top: 15px;
+  }
+  &__form {
+    display: flex;
+    flex-direction: column;
+    h3 {
+      margin-bottom: 15px;
+    }
+  }
+}
+.app {
+  &__btns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+}
 .observer {
-  height: 30px;
-  background: green;
+  height: 0px;
+  transform: translateY(-150px);
+  // background: #2d5234;
 }
 </style>
